@@ -32,8 +32,9 @@ public class PagamentoService {
     }
 
     @Transactional
-    public void excluir(Long id) {
-        Pagamento pagamento = buscarPorId(id).orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
+    public void excluir(Long codigoDebito) {
+        Pagamento pagamento = buscarPorId(codigoDebito)
+                .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
         if (pagamento.getStatus().equals(StatusPagamento.PENDENTE)) {
             pagamento.setAtivo(false);
             salvar(pagamento);
@@ -52,7 +53,7 @@ public class PagamentoService {
 
     @Transactional
     public Pagamento atualizar(AtualizarPagamentoDTO atualizarDTO) {
-        Pagamento pagamento = buscarPorId(atualizarDTO.id())
+        Pagamento pagamento = buscarPorId(atualizarDTO.codigoDebito())
                 .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
         switch (pagamento.getStatus()) {
             case PENDENTE -> pagamento.setStatus(atualizarDTO.status());
