@@ -1,5 +1,8 @@
 package br.com.bank.domain.pagamento;
 
+import br.com.bank.domain.pagamento.dto.PagamentoDTO;
+import br.com.bank.domain.pagamento.enums.MetodoPagamento;
+import br.com.bank.domain.pagamento.enums.StatusPagamento;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

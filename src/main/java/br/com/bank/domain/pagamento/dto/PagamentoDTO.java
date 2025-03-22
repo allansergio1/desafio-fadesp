@@ -1,5 +1,6 @@
-package br.com.bank.domain.pagamento;
+package br.com.bank.domain.pagamento.dto;
 
+import br.com.bank.domain.pagamento.enums.MetodoPagamento;
 import java.math.BigDecimal;
 
 public record PagamentoDTO(

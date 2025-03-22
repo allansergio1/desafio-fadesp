@@ -1,4 +1,4 @@
-package br.com.bank.domain.pagamento;
+package br.com.bank.domain.pagamento.enums;
 
 public enum MetodoPagamento {
 
