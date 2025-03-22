@@ -24,4 +24,10 @@ public class PagamentoController {
     public ResponseEntity<Pagamento> atualizar(@RequestBody AtualizarPagamentoDTO atualizarDTO) {
         return ResponseEntity.ok(pagamentoService.atualizar(atualizarDTO));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        pagamentoService.excluir(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -31,8 +31,15 @@ public class PagamentoService {
         return pagamentoRepository.save(pagamento);
     }
 
-    public void deletar(Long id) {
-        pagamentoRepository.deleteById(id);
+    @Transactional
+    public void excluir(Long id) {
+        Pagamento pagamento = buscarPorId(id).orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
+        if (pagamento.getStatus().equals(StatusPagamento.PENDENTE)) {
+            pagamento.setAtivo(false);
+            salvar(pagamento);
+        } else {
+            throw new StatusPagamentoException("Pagamento não pode ser excluído pois já foi processado");
+        }
     }
 
     public Optional<Pagamento> buscarPorId(Long id) {
@@ -45,7 +52,8 @@ public class PagamentoService {
 
     @Transactional
     public Pagamento atualizar(AtualizarPagamentoDTO atualizarDTO) {
-        Pagamento pagamento = buscarPorId(atualizarDTO.id()).orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
+        Pagamento pagamento = buscarPorId(atualizarDTO.id())
+                .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
         switch (pagamento.getStatus()) {
             case PENDENTE -> pagamento.setStatus(atualizarDTO.status());
             case PROCESSADO -> throw new StatusPagamentoException("Pagamento já foi realizado com SUCESSO");
