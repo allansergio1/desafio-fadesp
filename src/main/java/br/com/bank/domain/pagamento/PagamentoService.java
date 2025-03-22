@@ -48,8 +48,8 @@ public class PagamentoService {
         Pagamento pagamento = buscarPorId(atualizarDTO.id()).orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
         switch (pagamento.getStatus()) {
             case PENDENTE -> pagamento.setStatus(atualizarDTO.status());
-            case SUCESSO -> throw new StatusPagamentoException("Pagamento já foi realizado com SUCESSO");
-            case FALHA -> {
+            case PROCESSADO -> throw new StatusPagamentoException("Pagamento já foi realizado com SUCESSO");
+            case PROCESSADO_COM_FALHA -> {
                 if (!atualizarDTO.status().equals(StatusPagamento.PENDENTE)) {
                     throw new StatusPagamentoException("Pagamento com FALHA só pode ser alterado para o status PENDENTE");
                 } else {
