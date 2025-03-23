@@ -3,13 +3,15 @@ package br.com.bank.domain.pagamento;
 import br.com.bank.domain.pagamento.dto.AtualizarPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.FiltroPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.PagamentoDTO;
+import br.com.bank.domain.pagamento.enums.MetodoPagamento;
 import br.com.bank.domain.pagamento.enums.StatusPagamento;
+import br.com.bank.domain.pagamento.exception.MetodoPagamentoException;
 import br.com.bank.domain.pagamento.exception.StatusPagamentoException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +26,8 @@ public class PagamentoService {
 
     @Transactional
     public Pagamento receber(PagamentoDTO pagamentoDTO) {
-        Pagamento pagamento = new Pagamento();
-        pagamento.fromDTO(pagamentoDTO);
+        validacaoPagamento(pagamentoDTO);
+        Pagamento pagamento = convertToEntity(pagamentoDTO);
         pagamento.setStatus(StatusPagamento.PENDENTE);
         return salvar(pagamento);
     }
@@ -70,5 +72,26 @@ public class PagamentoService {
             }
         }
         return salvar(pagamento);
+    }
+
+    public Pagamento convertToEntity(PagamentoDTO pagamentoDTO) {
+        Pagamento pagamento = new Pagamento();
+        pagamento.setCodigoDebito(pagamentoDTO.codigoDebito());
+        pagamento.setCpfCnpj(pagamentoDTO.cpfCnpj());
+        pagamento.setMetodo(pagamentoDTO.metodo());
+        pagamento.setValor(pagamentoDTO.valor());
+        pagamento.setNumeroCartao(pagamentoDTO.numeroCartao());
+        return pagamento;
+    }
+
+    public void validacaoPagamento(PagamentoDTO pagamentoDTO) {
+        boolean hasMetodoCartao = MetodoPagamento.getMetodosCartao().contains(pagamentoDTO.metodo());
+        boolean hasNumeroCartao = StringUtils.hasText(pagamentoDTO.numeroCartao());
+        if (hasMetodoCartao && !hasNumeroCartao) {
+            throw new MetodoPagamentoException("Método de pagamento por cartão requer número do cartão");
+        }
+        if (!hasMetodoCartao && hasNumeroCartao) {
+            throw new MetodoPagamentoException("Método de pagamento não requer número do cartão");
+        }
     }
 }

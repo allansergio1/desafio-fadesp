@@ -3,9 +3,9 @@ package br.com.bank.domain.pagamento;
 import br.com.bank.domain.pagamento.dto.AtualizarPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.FiltroPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.PagamentoDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -19,12 +19,12 @@ public class PagamentoController {
     }
 
     @PostMapping("/receber")
-    public ResponseEntity<Pagamento> receber(@RequestBody PagamentoDTO pagamentoDTO) {
+    public ResponseEntity<Pagamento> receber(@RequestBody @Valid PagamentoDTO pagamentoDTO) {
         return ResponseEntity.ok(pagamentoService.receber(pagamentoDTO));
     }
 
     @PostMapping("/atualizar")
-    public ResponseEntity<Pagamento> atualizar(@RequestBody AtualizarPagamentoDTO atualizarDTO) {
+    public ResponseEntity<Pagamento> atualizar(@RequestBody @Valid AtualizarPagamentoDTO atualizarDTO) {
         return ResponseEntity.ok(pagamentoService.atualizar(atualizarDTO));
     }
 

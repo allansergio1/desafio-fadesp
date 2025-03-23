@@ -1,27 +1,40 @@
 package br.com.bank.domain.pagamento;
 
-import br.com.bank.domain.pagamento.dto.PagamentoDTO;
 import br.com.bank.domain.pagamento.enums.MetodoPagamento;
 import br.com.bank.domain.pagamento.enums.StatusPagamento;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Pagamento {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true, nullable = false)
     private Integer codigoDebito;
+
+    @Column(nullable = false)
     private String cpfCnpj;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MetodoPagamento metodo;
+
+    @Column(nullable = false)
     private BigDecimal valor;
+
     private String numeroCartao;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusPagamento status;
+
     private boolean ativo = true;
 
     public Long getId() {
@@ -61,7 +74,11 @@ public class Pagamento {
     }
 
     public void setValor(BigDecimal valor) {
-        this.valor = valor;
+        if (valor != null) {
+            this.valor = valor.setScale(2, RoundingMode.HALF_UP);
+        } else {
+            this.valor = null;
+        }
     }
 
     public String getNumeroCartao() {
@@ -99,13 +116,5 @@ public class Pagamento {
     @Override
     public int hashCode() {
         return Objects.hash(id, codigoDebito, cpfCnpj, metodo, valor, numeroCartao, status, ativo);
-    }
-
-    public void fromDTO(PagamentoDTO pagamentoDTO) {
-        this.setCodigoDebito(pagamentoDTO.codigoDebito());
-        this.setCpfCnpj(pagamentoDTO.cpfCnpj());
-        this.setMetodo(pagamentoDTO.metodo());
-        this.setValor(pagamentoDTO.valor());
-        this.setNumeroCartao(pagamentoDTO.numeroCartao());
     }
 }
