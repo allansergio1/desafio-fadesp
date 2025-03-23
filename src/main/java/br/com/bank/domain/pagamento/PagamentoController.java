@@ -3,6 +3,7 @@ package br.com.bank.domain.pagamento;
 import br.com.bank.domain.pagamento.dto.AtualizarPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.FiltroPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.PagamentoDTO;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pagamento")
+@Tag(name = "Pagamento", description = "API para realizar pagamentos")
 public class PagamentoController {
 
     private final PagamentoService pagamentoService;
