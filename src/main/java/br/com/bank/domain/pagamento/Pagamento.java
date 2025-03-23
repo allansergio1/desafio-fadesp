@@ -13,8 +13,9 @@ public class Pagamento {
 
     @Id
     @GeneratedValue
-    private Long codigoDebito;
-    private String cpfCnpjPagador;
+    private Long id;
+    private Integer codigoDebito;
+    private String cpfCnpj;
     @Enumerated(EnumType.STRING)
     private MetodoPagamento metodo;
     private BigDecimal valor;
@@ -23,20 +24,28 @@ public class Pagamento {
     private StatusPagamento status;
     private boolean ativo = true;
 
-    public Long getCodigoDebito() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getCodigoDebito() {
         return codigoDebito;
     }
 
-    public void setCodigoDebito(Long codigoDebito) {
+    public void setCodigoDebito(Integer codigoDebito) {
         this.codigoDebito = codigoDebito;
     }
 
-    public String getCpfCnpjPagador() {
-        return cpfCnpjPagador;
+    public String getCpfCnpj() {
+        return cpfCnpj;
     }
 
-    public void setCpfCnpjPagador(String cpfCnpj) {
-        this.cpfCnpjPagador = cpfCnpj;
+    public void setCpfCnpj(String cpfCnpj) {
+        this.cpfCnpj = cpfCnpj;
     }
 
     public MetodoPagamento getMetodo() {
@@ -84,19 +93,17 @@ public class Pagamento {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pagamento pagamento = (Pagamento) o;
-        return ativo == pagamento.ativo && Objects.equals(codigoDebito, pagamento.codigoDebito)
-                && Objects.equals(cpfCnpjPagador, pagamento.cpfCnpjPagador) && metodo == pagamento.metodo
-                && Objects.equals(valor, pagamento.valor) && Objects.equals(numeroCartao, pagamento.numeroCartao)
-                && status == pagamento.status;
+        return ativo == pagamento.ativo && Objects.equals(id, pagamento.id) && Objects.equals(codigoDebito, pagamento.codigoDebito) && Objects.equals(cpfCnpj, pagamento.cpfCnpj) && metodo == pagamento.metodo && Objects.equals(valor, pagamento.valor) && Objects.equals(numeroCartao, pagamento.numeroCartao) && status == pagamento.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(codigoDebito, cpfCnpjPagador, metodo, valor, numeroCartao, status, ativo);
+        return Objects.hash(id, codigoDebito, cpfCnpj, metodo, valor, numeroCartao, status, ativo);
     }
 
     public void fromDTO(PagamentoDTO pagamentoDTO) {
-        this.setCpfCnpjPagador(pagamentoDTO.cpfCnpj());
+        this.setCodigoDebito(pagamentoDTO.codigoDebito());
+        this.setCpfCnpj(pagamentoDTO.cpfCnpj());
         this.setMetodo(pagamentoDTO.metodo());
         this.setValor(pagamentoDTO.valor());
         this.setNumeroCartao(pagamentoDTO.numeroCartao());
