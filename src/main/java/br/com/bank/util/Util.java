@@ -10,7 +10,7 @@ public class Util {
         return (isValidCPF(cpfCnpj) || isValidCNPJ(cpfCnpj));
     }
 
-    private static boolean isValidCPF(String cpf) {
+    public static boolean isValidCPF(String cpf) {
         if (cpf.length() != 11 || hasPadraoInvalido(cpf)) return false;
 
         Integer firstDigit = calcularDigitoVerificador(cpf.substring(0, 9), PESO_CPF);
@@ -19,7 +19,7 @@ public class Util {
         return cpf.equals(cpf.substring(0, 9) + firstDigit + secondDigit);
     }
 
-    private static boolean isValidCNPJ(String cnpj) {
+    public static boolean isValidCNPJ(String cnpj) {
         if (cnpj.length() != 14) return false;
 
         Integer firstDigit = calcularDigitoVerificador(cnpj.substring(0, 12), PESO_CNPJ);
