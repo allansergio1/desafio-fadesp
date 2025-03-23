@@ -1,13 +1,16 @@
 package br.com.bank.domain.pagamento;
 
 import br.com.bank.domain.pagamento.dto.AtualizarPagamentoDTO;
+import br.com.bank.domain.pagamento.dto.FiltroPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.PagamentoDTO;
 import br.com.bank.domain.pagamento.enums.StatusPagamento;
 import br.com.bank.domain.pagamento.exception.StatusPagamentoException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,8 +49,9 @@ public class PagamentoService {
         return pagamentoRepository.findById(id);
     }
 
-    public Iterable<Pagamento> buscarTodos() {
-        return pagamentoRepository.findAll();
+    public List<Pagamento> listar(FiltroPagamentoDTO filtro) {
+        Specification<Pagamento> spec = Specification.where(PagamentoSpecification.comFiltro(filtro));
+        return pagamentoRepository.findAll(spec);
     }
 
     @Transactional

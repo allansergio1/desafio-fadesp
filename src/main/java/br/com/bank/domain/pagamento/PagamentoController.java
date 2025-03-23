@@ -1,9 +1,12 @@
 package br.com.bank.domain.pagamento;
 
 import br.com.bank.domain.pagamento.dto.AtualizarPagamentoDTO;
+import br.com.bank.domain.pagamento.dto.FiltroPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.PagamentoDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/pagamento")
@@ -29,5 +32,10 @@ public class PagamentoController {
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
         pagamentoService.excluir(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<Pagamento>> listar(@ModelAttribute FiltroPagamentoDTO filtro) {
+        return ResponseEntity.ok(pagamentoService.listar(filtro));
     }
 }
