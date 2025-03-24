@@ -8,6 +8,14 @@ Ao receber um pagamento, a API deverá armazená-lo no banco de dados com o stat
 
 Além disso, a API deve permitir a listagem de todos os pagamentos recebidos e oferecer ao cliente a opção de filtrá-los conforme necessário.
 
+## Execução
+
+A aplicação está disponível em um container Docker. Para isso, basta ter o Docker instalado em sua máquina e executar o seguinte comando na raiz do projeto:
+
+```
+docker-compose up
+```
+
 ## Documentação
 
 A documentação da API encontra-se disponível no Swagger a partir da URL raiz (```localhost:8080```) ou no seguinte link:
