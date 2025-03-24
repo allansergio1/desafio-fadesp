@@ -4,13 +4,18 @@ import br.com.bank.domain.pagamento.enums.MetodoPagamento;
 import br.com.bank.domain.pagamento.enums.StatusPagamento;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Pagamento {
+public class Pagamento implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

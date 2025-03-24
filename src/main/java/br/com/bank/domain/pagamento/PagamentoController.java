@@ -5,6 +5,7 @@ import br.com.bank.domain.pagamento.dto.FiltroPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.PagamentoDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -37,7 +38,7 @@ public class PagamentoController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<Pagamento>> listar(@ModelAttribute FiltroPagamentoDTO filtro) {
+    public ResponseEntity<List<Pagamento>> listar(@ParameterObject @ModelAttribute FiltroPagamentoDTO filtro) {
         return ResponseEntity.ok(pagamentoService.listar(filtro));
     }
 }
