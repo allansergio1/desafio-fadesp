@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "Receber",
+			"name": "Realizar",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -22,7 +22,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/pagamento/receber",
+					"raw": "http://localhost:8080/pagamento/realizar",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -30,7 +30,7 @@
 					"port": "8080",
 					"path": [
 						"pagamento",
-						"receber"
+						"realizar"
 					]
 				}
 			},

@@ -28,8 +28,8 @@ public class PagamentoService {
     }
 
     @Transactional
-    public Pagamento receber(PagamentoDTO pagamentoDTO) {
-        log.info("Iniciando recebimento de pagamento...");
+    public Pagamento realizar(PagamentoDTO pagamentoDTO) {
+        log.info("Iniciando realização de pagamento...");
         validacaoPagamento(pagamentoDTO);
         Pagamento pagamento = convertToEntity(pagamentoDTO);
         pagamento.setStatus(StatusPagamento.PENDENTE);
