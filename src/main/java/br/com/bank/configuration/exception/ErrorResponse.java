@@ -5,36 +5,29 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
 
-    private String exceptionName;
+    private String exception;
     private String message;
-    private String detailMessage;
 
-    public ErrorResponse(String exceptionName, String message, String detailMessage) {
-        this.exceptionName = exceptionName;
+    public ErrorResponse(String exception, String message) {
+        this.exception = exception;
         this.message = message;
-        this.detailMessage = detailMessage;
     }
 
-    public String getExceptionName() {
-        return exceptionName;
+    public String getException() {
+        return exception;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public String getDetailMessage() {
-        return detailMessage;
-    }
-
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Exception: ").append(this.exceptionName).append(" | ");
+        builder.append("Exception: ").append(this.exception);
         if (this.message != null) {
-            builder.append("Message: ").append(this.message).append(" | ");
+            builder.append(" | Message: ").append(this.message);
         }
-        builder.append("Detail: ").append(this.detailMessage);
         return builder.toString();
     }
 }

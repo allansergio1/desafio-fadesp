@@ -1,5 +1,6 @@
 package br.com.bank.domain.pagamento;
 
+import br.com.bank.configuration.exception.GlobalExceptionHandler;
 import br.com.bank.domain.pagamento.dto.AtualizarPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.FiltroPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.PagamentoDTO;
@@ -8,6 +9,8 @@ import br.com.bank.domain.pagamento.enums.StatusPagamento;
 import br.com.bank.domain.pagamento.exception.MetodoPagamentoException;
 import br.com.bank.domain.pagamento.exception.StatusPagamentoException;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +22,7 @@ import java.util.Optional;
 public class PagamentoService {
 
     private final PagamentoRepository pagamentoRepository;
+    private static final Logger log = LoggerFactory.getLogger(PagamentoService.class);
 
     public PagamentoService(PagamentoRepository pagamentoRepository) {
         this.pagamentoRepository = pagamentoRepository;
@@ -26,6 +30,7 @@ public class PagamentoService {
 
     @Transactional
     public Pagamento receber(PagamentoDTO pagamentoDTO) {
+        log.info("Iniciando recebimento de pagamento...");
         validacaoPagamento(pagamentoDTO);
         Pagamento pagamento = convertToEntity(pagamentoDTO);
         pagamento.setStatus(StatusPagamento.PENDENTE);
@@ -38,6 +43,7 @@ public class PagamentoService {
 
     @Transactional
     public void excluir(Long id) {
+        log.info("Iniciando exclusão de pagamento...");
         Pagamento pagamento = buscarPorId(id).orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
         if (pagamento.getStatus().equals(StatusPagamento.PENDENTE)) {
             pagamento.setAtivo(false);
@@ -58,6 +64,7 @@ public class PagamentoService {
 
     @Transactional
     public Pagamento atualizar(AtualizarPagamentoDTO atualizarDTO) {
+        log.info("Iniciando atualização de pagamento...");
         Pagamento pagamento = buscarPorId(atualizarDTO.id())
                 .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
         switch (pagamento.getStatus()) {
@@ -85,6 +92,7 @@ public class PagamentoService {
     }
 
     public void validacaoPagamento(PagamentoDTO pagamentoDTO) {
+        log.info("Validando pagamento...");
         boolean hasMetodoCartao = MetodoPagamento.getMetodosCartao().contains(pagamentoDTO.metodo());
         boolean hasNumeroCartao = StringUtils.hasText(pagamentoDTO.numeroCartao());
         if (hasMetodoCartao && !hasNumeroCartao) {
