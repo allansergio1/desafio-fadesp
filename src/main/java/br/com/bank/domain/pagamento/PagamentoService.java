@@ -7,6 +7,7 @@ import br.com.bank.domain.pagamento.enums.MetodoPagamento;
 import br.com.bank.domain.pagamento.enums.StatusPagamento;
 import br.com.bank.domain.pagamento.exception.MetodoPagamentoException;
 import br.com.bank.domain.pagamento.exception.StatusPagamentoException;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,6 +94,9 @@ public class PagamentoService {
 
     public void validacaoPagamento(PagamentoDTO pagamentoDTO) {
         log.info("Validando pagamento...");
+        if (pagamentoRepository.findByCodigoDebito(pagamentoDTO.codigoDebito()).isPresent()) {
+            throw new EntityExistsException("Débito já cadastrado com o código informado");
+        }
         boolean hasMetodoCartao = MetodoPagamento.getMetodosCartao().contains(pagamentoDTO.metodo());
         boolean hasNumeroCartao = StringUtils.hasText(pagamentoDTO.numeroCartao());
         if (hasMetodoCartao && !hasNumeroCartao) {
