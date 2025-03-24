@@ -1,4 +1,4 @@
-package br.com.bank.configuration;
+package br.com.bank.configuration.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
