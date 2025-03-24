@@ -5,6 +5,9 @@ public class Util {
     private static final int[] PESO_CPF = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
     private static final int[] PESO_CNPJ = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
 
+    private Util() {
+    }
+
     public static boolean isValidCpfCnpj(String cpfCnpj) {
         cpfCnpj = cpfCnpj.trim().replaceAll("\\D", "");
         return (isValidCPF(cpfCnpj) || isValidCNPJ(cpfCnpj));

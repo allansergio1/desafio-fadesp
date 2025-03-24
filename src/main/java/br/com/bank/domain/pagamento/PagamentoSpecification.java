@@ -9,6 +9,9 @@ import java.util.List;
 
 public class PagamentoSpecification {
 
+    private PagamentoSpecification() {
+    }
+
     public static Specification<Pagamento> comFiltro(FiltroPagamentoDTO filtro) {
         return (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();

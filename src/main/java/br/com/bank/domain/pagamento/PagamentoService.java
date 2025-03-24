@@ -1,6 +1,5 @@
 package br.com.bank.domain.pagamento;
 
-import br.com.bank.configuration.exception.GlobalExceptionHandler;
 import br.com.bank.domain.pagamento.dto.AtualizarPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.FiltroPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.PagamentoDTO;
