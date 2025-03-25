@@ -8,12 +8,26 @@ Ao receber um pagamento, a API deverá armazená-lo no banco de dados com o stat
 
 Além disso, a API deve permitir a listagem de todos os pagamentos recebidos e oferecer ao cliente a opção de filtrá-los conforme necessário.
 
+## Tecnologias
+
+- **Spring Boot**: Framework utilizado para o desenvolvimento da API.
+- **Java**: Versão 17
+- **H2**: Banco de dados em memória para armazenamento dos pagamentos.
+- **Swagger**: Interface interativa para explorar e testar os endpoints da API.
+
 ## Execução
 
-A aplicação está disponível em um container Docker. Para isso, basta ter o Docker instalado em sua máquina e executar o seguinte comando na raiz do projeto:
+Para executar a aplicação no modo convencional, basta clonar o repositório com ```git clone```, executar o comando ```mvn clean install``` e, em seguida, executar a aplicação com o comando ```mvn spring-boot:run```.
+
+A aplicação também está disponível em um container Docker. Para isso, basta ter o Docker instalado em sua máquina e executar o seguinte comando na raiz do projeto:
 
 ```
 docker-compose up
+```
+Para abrir o console do H2 database, após levantar o projeto, acesse o seguinte endereço:
+
+```
+http://localhost:8080/h2
 ```
 
 ## Documentação
@@ -21,7 +35,7 @@ docker-compose up
 A documentação da API encontra-se disponível no Swagger a partir da URL raiz (```localhost:8080```) ou no seguinte link:
 
 ```
-localhost:8080/swagger
+http://localhost:8080/swagger
 ```
 Nela você encontrará informações detalhadas sobre cada endpoint da API, incluindo os parâmetros necessários, os tipos de dados esperados, os códigos de resposta e exemplos de requisições e respostas.
 
