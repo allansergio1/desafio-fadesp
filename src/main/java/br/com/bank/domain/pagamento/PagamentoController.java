@@ -5,11 +5,18 @@ import br.com.bank.domain.pagamento.dto.FiltroPagamentoDTO;
 import br.com.bank.domain.pagamento.dto.PagamentoDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/pagamento")
@@ -25,13 +32,17 @@ public class PagamentoController {
     @PostMapping("/realizar")
     @Operation(summary = "Realiza um pagamento a partir de PagamentoDTO")
     public ResponseEntity<Pagamento> realizar(@RequestBody @Valid PagamentoDTO pagamentoDTO) {
-        return ResponseEntity.ok(pagamentoService.realizar(pagamentoDTO));
+        Pagamento pagamento = pagamentoService.realizar(pagamentoDTO);
+        pagamento.add(linkTo(methodOn(PagamentoController.class).buscar(pagamento.getId())).withSelfRel());
+        return ResponseEntity.status(HttpStatus.CREATED).body(pagamento);
     }
 
     @PostMapping("/atualizar")
     @Operation(summary = "Atualiza um pagamento a partir de AtualizarPagamentoDTO")
     public ResponseEntity<Pagamento> atualizar(@RequestBody @Valid AtualizarPagamentoDTO atualizarDTO) {
-        return ResponseEntity.ok(pagamentoService.atualizar(atualizarDTO));
+        Pagamento pagamento = pagamentoService.atualizar(atualizarDTO);
+        pagamento.add(linkTo(methodOn(PagamentoController.class).buscar(pagamento.getId())).withSelfRel());
+        return ResponseEntity.ok(pagamento);
     }
 
     @DeleteMapping("/{id}")
@@ -44,6 +55,21 @@ public class PagamentoController {
     @GetMapping("/listar")
     @Operation(summary = "Lista todos os pagamentos ou filtra a partir dos parâmetros recebidos")
     public ResponseEntity<List<Pagamento>> listar(@ParameterObject @ModelAttribute FiltroPagamentoDTO filtro) {
-        return ResponseEntity.ok(pagamentoService.listar(filtro));
+        List<Pagamento> pagamentos = pagamentoService.listar(filtro).stream()
+                .map(pagamento ->pagamento.add(
+                        linkTo(methodOn(PagamentoController.class).buscar(pagamento.getId())).withSelfRel()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(pagamentos);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Busca um pagamento a partir de seu id")
+    public ResponseEntity<Pagamento> buscar(@PathVariable Long id) {
+        Pagamento pagamento = pagamentoService.buscarPorId(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
+        pagamento.add(linkTo(methodOn(PagamentoController.class).buscar(id)).withSelfRel());
+        pagamento.add(linkTo(methodOn(PagamentoController.class)
+                .listar(new FiltroPagamentoDTO(null, null, null))).withRel("listar-pagamentos"));
+        return ResponseEntity.ok(pagamento);
     }
 }

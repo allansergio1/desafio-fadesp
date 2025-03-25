@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "eef3f815-91ac-4dcf-a21b-848d667b1970",
+		"_postman_id": "6c60e719-4fd6-4183-92ee-b69c7344b5f0",
 		"name": "Bank",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "28224690"
+		"_exporter_id": "28224690",
+		"_collection_link": "https://winter-trinity-526937.postman.co/workspace/Desafio-fadesp~bc849856-9c44-4317-a010-ced5949fab1a/collection/28224690-6c60e719-4fd6-4183-92ee-b69c7344b5f0?action=share&source=collection_link&creator=28224690"
 	},
 	"item": [
 		{
@@ -119,6 +120,26 @@
 							"key": "status",
 							"value": "PROCESSADO"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/pagamento/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pagamento",
+						"1"
 					]
 				}
 			},

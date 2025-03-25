@@ -4,6 +4,8 @@ import br.com.bank.domain.pagamento.enums.MetodoPagamento;
 import br.com.bank.domain.pagamento.enums.StatusPagamento;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+import org.springframework.hateoas.RepresentationModel;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -12,7 +14,7 @@ import java.util.Objects;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Pagamento implements Serializable {
+public class Pagamento extends RepresentationModel<Pagamento> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
