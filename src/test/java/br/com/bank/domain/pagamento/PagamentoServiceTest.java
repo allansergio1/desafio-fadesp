@@ -136,7 +136,12 @@ class PagamentoServiceTest {
     @Test
     @DisplayName("Deve excluir pagamento pendente com sucesso")
     void excluirPagamento_Success() {
-        when(pagamentoRepository.findById(anyLong())).thenReturn(Optional.of(pagamento));
+        pagamento.setStatus(StatusPagamento.PENDENTE);
+        pagamento.setAtivo(true);
+
+        when(pagamentoRepository.findByIdAndAtivo(anyLong(), eq(true)))
+                .thenReturn(Optional.of(pagamento));
+        when(pagamentoRepository.save(any(Pagamento.class))).thenReturn(pagamento);
 
         pagamentoService.excluir(1L);
 
@@ -147,7 +152,7 @@ class PagamentoServiceTest {
     @Test
     @DisplayName("Deve lançar exceção ao excluir pagamento não encontrado")
     void excluirPagamento_NotFound() {
-        when(pagamentoRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(pagamentoRepository.findByIdAndAtivo(anyLong(), anyBoolean())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> {
             pagamentoService.excluir(1L);
@@ -158,11 +163,16 @@ class PagamentoServiceTest {
     @DisplayName("Deve lançar exceção ao excluir pagamento já processado")
     void excluirPagamento_JaProcessado() {
         pagamento.setStatus(StatusPagamento.PROCESSADO);
-        when(pagamentoRepository.findById(anyLong())).thenReturn(Optional.of(pagamento));
+        pagamento.setAtivo(true);
+
+        when(pagamentoRepository.findByIdAndAtivo(anyLong(), eq(true)))
+                .thenReturn(Optional.of(pagamento));
 
         assertThrows(StatusPagamentoException.class, () -> {
             pagamentoService.excluir(1L);
         });
+
+        verify(pagamentoRepository, never()).save(any());
     }
 
     @Test
