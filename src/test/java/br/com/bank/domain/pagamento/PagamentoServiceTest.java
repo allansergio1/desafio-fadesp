@@ -202,7 +202,6 @@ class PagamentoServiceTest {
         FiltroPagamentoDTO filtro = new FiltroPagamentoDTO(
                 12345, "123.456.789-09", StatusPagamento.PENDENTE);
 
-        // Correção: usar any(Specification.class) ao invés de any()
         when(pagamentoRepository.findAll(any(Specification.class))).thenReturn(List.of(pagamento));
 
         List<Pagamento> result = pagamentoService.listar(filtro);
