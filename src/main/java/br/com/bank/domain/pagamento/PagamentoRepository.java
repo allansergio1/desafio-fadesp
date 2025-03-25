@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface PagamentoRepository extends JpaRepository<Pagamento, Long>, JpaSpecificationExecutor<Pagamento> {
 
     Optional<Pagamento> findByCodigoDebito(Integer codigo);
+
+    Optional<Pagamento> findByIdAndAtivo(Long id, Boolean ativo);
 }

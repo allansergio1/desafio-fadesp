@@ -45,7 +45,8 @@ public class PagamentoService {
     @Transactional
     public void excluir(Long id) {
         log.info("Iniciando exclusão de pagamento...");
-        Pagamento pagamento = buscarPorId(id).orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
+        Pagamento pagamento = pagamentoRepository.findByIdAndAtivo(id, true)
+                .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
         if (pagamento.getStatus().equals(StatusPagamento.PENDENTE)) {
             pagamento.setAtivo(false);
             salvar(pagamento);

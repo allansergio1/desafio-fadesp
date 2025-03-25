@@ -37,11 +37,16 @@ public class PagamentoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(pagamento);
     }
 
-    @PostMapping("/atualizar")
+    @PutMapping("/atualizar")
     @Operation(summary = "Atualiza um pagamento a partir de AtualizarPagamentoDTO")
     public ResponseEntity<Pagamento> atualizar(@RequestBody @Valid AtualizarPagamentoDTO atualizarDTO) {
         Pagamento pagamento = pagamentoService.atualizar(atualizarDTO);
         pagamento.add(linkTo(methodOn(PagamentoController.class).buscar(pagamento.getId())).withSelfRel());
+        pagamento.add(linkTo(methodOn(PagamentoController.class).excluir(pagamento.getId()))
+                .withRel("excluir").withType("DELETE"));
+        pagamento.add(linkTo(methodOn(PagamentoController.class)
+                .listar(new FiltroPagamentoDTO(null, null, null)))
+                .withRel("listar").withType("GET"));
         return ResponseEntity.ok(pagamento);
     }
 
@@ -56,8 +61,11 @@ public class PagamentoController {
     @Operation(summary = "Lista todos os pagamentos ou filtra a partir dos parâmetros recebidos")
     public ResponseEntity<List<Pagamento>> listar(@ParameterObject @ModelAttribute FiltroPagamentoDTO filtro) {
         List<Pagamento> pagamentos = pagamentoService.listar(filtro).stream()
-                .map(pagamento ->pagamento.add(
-                        linkTo(methodOn(PagamentoController.class).buscar(pagamento.getId())).withSelfRel()))
+                .map(pagamento -> {
+                    pagamento.add(linkTo(methodOn(PagamentoController.class).buscar(pagamento.getId()))
+                            .withSelfRel().withType("GET"));
+                    return pagamento;
+                })
                 .collect(Collectors.toList());
         return ResponseEntity.ok(pagamentos);
     }
@@ -67,9 +75,16 @@ public class PagamentoController {
     public ResponseEntity<Pagamento> buscar(@PathVariable Long id) {
         Pagamento pagamento = pagamentoService.buscarPorId(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
-        pagamento.add(linkTo(methodOn(PagamentoController.class).buscar(id)).withSelfRel());
+        pagamento.add(linkTo(methodOn(PagamentoController.class).buscar(pagamento.getId()))
+                .withSelfRel().withType("GET"));
+        pagamento.add(linkTo(methodOn(PagamentoController.class).excluir(pagamento.getId()))
+                .withRel("excluir").withType("DELETE"));
         pagamento.add(linkTo(methodOn(PagamentoController.class)
-                .listar(new FiltroPagamentoDTO(null, null, null))).withRel("listar-pagamentos"));
+                .atualizar(new AtualizarPagamentoDTO(null, null)))
+                .withRel("atualizar").withType("PUT"));
+        pagamento.add(linkTo(methodOn(PagamentoController.class)
+                .listar(new FiltroPagamentoDTO(null, null, null)))
+                .withRel("listar").withType("GET"));
         return ResponseEntity.ok(pagamento);
     }
 }

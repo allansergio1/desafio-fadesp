@@ -73,7 +73,7 @@ class PagamentoControllerTest {
 
         ResponseEntity<Pagamento> response = pagamentoController.realizar(pagamentoDTO);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(pagamento, response.getBody());
         verify(pagamentoService, times(1)).realizar(pagamentoDTO);
     }
